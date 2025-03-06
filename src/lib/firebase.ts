@@ -18,7 +18,11 @@ const firebaseConfig = {
 /* Ensures that Firebase is initialized only once, preventing errors. */
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-const analytics = getAnalytics(app);
+// Ensure Analytics only runs on the client side
+let analytics;
+if (typeof window !== "undefined") {
+  analytics = getAnalytics(app);
+}
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
