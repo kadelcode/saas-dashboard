@@ -1,14 +1,52 @@
 "use client"
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import React from "react";
 import Sidebar from "./Sidebar";
+import { auth } from "@/lib/firebase";
 
 const publicRoutes = ["/login", "/register"];
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const isPublicPage = publicRoutes.includes(pathname);
+    const router = useRouter();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        setIsAuthenticated(!!user);
+        setLoading(false);
+      })
+
+      return () => unsubscribe();
+    }, []);
+
+    /*
+    This `useEffect` hook runs whenever `isAuthenticated`, `isPublicPage`
+    or `router` changes
+    */
+    useEffect(() => {
+      if (!isAuthenticated && !isPublicPage && !loading) {
+        router.push("/login")
+      }
+    }, [isAuthenticated, isPublicPage, loading, router]);
+
+    if (!isAuthenticated && !isPublicPage && loading) {
+      return (
+      <div className="text-lg font-semibold text-blue-500 flex items-center justify-center h-screen">
+        Checking authentication...
+      </div>
+      )
+    }
+
+    // ✅ If user is NOT authenticated and it's NOT a public page, do NOT render anything
+    if (!isAuthenticated && !isPublicPage) {
+      return null; // Prevents flickering before redirect
+    }
+
 
     return <>{isPublicPage ? children : <DashboardLayout>{children}</DashboardLayout>}</>;
 }
