@@ -61,3 +61,28 @@ export const signInWithEmail = async (email: string, password: string) => {
         console.error("Email Sign-In Error:", error);
     }
 };
+
+
+// Register new user
+/* An asynchronous function that handles new user registration. */
+export const registerUser = async (email: string, password: string, displayName: string) => {
+    try {
+        // Creates a new user with the provided email and password
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+
+        // Extracts the user information from the registration result
+        const user = result.user;
+
+        // Store user in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+            email,
+            displayName,
+            role:"user", // Default role
+            createdAt: new Date(),
+        }); // Sets the user's information in Firestore
+
+        return user; // Returns the user object if registration is successful
+    } catch (error) {
+        console.error("Registration Error:", error);
+    } // Catches and logs any errors that occur during the registration process
+};
