@@ -45,4 +45,19 @@ export const signInWithGoogle = async () => {
     } catch (error) { // Catches and logs any errors that occur during the sign-in process.
         console.error("Google Sign-In Error:", error);
     }
-}
+};
+
+
+// Sign in with Email & Password
+/* An asynchronous function that handles email and password sign-in */
+export const signInWithEmail = async (email: string, password: string) => {
+    try {
+        // Signs in the user with the provided email and password
+        const result = await signInWithEmailAndPassword(auth, email, password);
+
+        // Returns the user object if sign-in is successful
+        return result.user;
+    } catch (error) { // Catches and logs any errors that occur during the sign-in process.
+        console.error("Email Sign-In Error:", error);
+    }
+};
