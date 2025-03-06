@@ -86,3 +86,13 @@ export const registerUser = async (email: string, password: string, displayName:
         console.error("Registration Error:", error);
     } // Catches and logs any errors that occur during the registration process
 };
+
+
+// Sign out
+export const logout = async () => { // An asynchronous function that handles user sign-out
+    try {
+        await signOut(auth); // Signs out the currently authenticated user.
+    } catch (error) {
+        console.error("Sign Out Errro:", error);
+    } // Catches and logs any errors that occur during the sign-out process.
+};
