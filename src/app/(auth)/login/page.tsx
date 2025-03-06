@@ -1,5 +1,5 @@
-/* This directive indicates that the component should be rendered on the client side. */
-"use client";
+"use client"; /* This directive indicates that the component should be rendered on the client side. */
+
 
 /* Import the `useState` hook from React, which allows you to add
 state to functional components
@@ -14,6 +14,9 @@ navigation capabilities.
 */
 import { useRouter } from "next/navigation";
 
+import { ClipLoader } from "react-spinners";
+
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 // Defines a functional component
 const Login = () => {
@@ -25,9 +28,17 @@ const Login = () => {
   // and a function `setPassword` to update it
   const [password, setPassword] = useState("");
 
+  // Loading state
+  const [loading, setLoading] = useState(false);
+
+  // Initializes a state variable `errors` with an empty string
+  const [errors, setErrors] = useState<{ email?: string; password?: string; general?:string}>({});
+
   // Initalizes the `router object using the `useRouter` hook,
   // allowing navigation between pages.
   const router = useRouter();
+
+  const [error, setError] = useState<string | null>(null); // Local error state
 
   const handleGoogleSignIn = async () => { // Asynchronous function to handle Google sign-in
     await signInWithGoogle();
@@ -36,30 +47,98 @@ const Login = () => {
 
   const handleEmailSignIn = async (e: React.FormEvent) => { // Asynchronous function to handle email sign-in
     e.preventDefault(); // Prevents the default form submission behavior
-    await signInWithEmail(email, password);
-    router.push("/");
+
+    setErrors({}); // Reset previous errors
+    setError(null); // Clear previous errors
+
+    setLoading(true); // Start loading
+
+    if (!email) {
+      setErrors((prev) => ({ ...prev, email: "Email is required" }));
+      setLoading(false);
+      return;
+    }
+    if (!password) {
+      setErrors((prev) => ({ ...prev, password: "Password is required" }));
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const auth = getAuth();
+      await signInWithEmailAndPassword(auth, email, password);
+
+      router.push("/");
+    } catch (err: any) {
+      console.error("Authentication Error:", err.code, err.message);
+      setError(mapFirebaseError(err.code)); // Use helper function to map errors
+      return;
+    } finally {
+      setLoading(false); // Stop loading after request
+    }
+    
   };
 
   return ( // Returns JSX for the component
     <div className="flex items-center justify-center h-screen">
       <div className="bg-white p-8 rounded shadow-md w-96">
         <h2 className="text-2xl font-bold mb-6">Login</h2>
-        <form>
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-2 mb-4 border rounded"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-2 mb-4 border rounded"
-          />
-          <button className="w-full bg-blue-600 text-white py-2 rounded">Login</button>
+        {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+        <form onSubmit={handleEmailSignIn} className="space-y-4">
+          <div>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`w-full p-2 border ${errors.email ? "border-red-500" : "border-gray-300"} rounded`}
+              autoComplete="email"
+            />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          </div>
+
+          <div>
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`w-full p-2 border ${errors.password ? "border-red-500" : "border-gray-300"} rounded`}
+              
+            />
+            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+          </div>
+          <button type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-blue-400"
+            disabled={loading} // Disable button when loading
+          >
+            { loading ? (
+              <span className="flex items-center justify-center">
+                <ClipLoader size={18} color="white" />
+                <span className="ml-2">Logging in...</span>
+              </span>
+            ) : (
+              "Login"
+            )} 
+          </button>
+            
         </form>
       </div>
     </div>
   );
+};
+
+/** Helper function to map Firebase error codes to user-friendly messages */
+const mapFirebaseError = (code: string) => {
+  const errorMessages: { [key: string]: string } = {
+    "auth/invalid-credential": "Invalid email or password. Please try again.",
+    "auth/user-not-found": "No account found with this email.",
+    "auth/wrong-password": "Incorrect password. Please try again.",
+    "auth/too-many-requests": "Too many attempts. Please try again later.",
+    "auth/network-request-failed": "Network error. Check your connection.",
+    "auth/internal-error": "Something went wrong. Try again later.",
+  };
+  return errorMessages[code] || "Authentication failed. Please try again.";
 };
 
 /* Exports the `Login` components as the default export,

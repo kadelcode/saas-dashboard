@@ -24,6 +24,7 @@ const Register = () => {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
+          <div className="bg-white p-8 rounded shadow-md w-96">
             <h2 className="text-2xl font-bold">Register</h2>
             <form onSubmit={handleRegister} className="flex flex-col gap-4 mt-4 max-w-96">
                 <input
@@ -58,6 +59,7 @@ const Register = () => {
                 />
                 <button type="submit" className="bg-blue-600 text-white p-2 rounded">Register</button>
             </form>
+          </div>
         </div>
     );
 };
