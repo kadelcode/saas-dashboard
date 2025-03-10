@@ -10,7 +10,7 @@ const Sidebar = () => {
                 <ul>
                     <li className="mb-4">
                         <Link href="/" className="flex items-center gap-2">
-                            <Home size={20} /> Dashboard
+                            <Home size={20} /> Home
                         </Link>
                     </li>
 
@@ -23,6 +23,12 @@ const Sidebar = () => {
                     <li className="mb-4">
                         <Link href="/analytics" className="flex items-center gap-2">
                             <BarChart size={20} /> Analytics
+                        </Link>
+                    </li>
+
+                    <li className="mb-4">
+                        <Link href="/analytics" className="flex items-center gap-2">
+                            <BarChart size={20} /> Settings
                         </Link>
                     </li>
                 </ul>

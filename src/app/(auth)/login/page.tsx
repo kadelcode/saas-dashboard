@@ -15,8 +15,12 @@ navigation capabilities.
 import { useRouter } from "next/navigation";
 
 import { ClipLoader } from "react-spinners";
-
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import toast from "react-hot-toast";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 // Defines a functional component
 const Login = () => {
@@ -40,6 +44,8 @@ const Login = () => {
 
   const [error, setError] = useState<string | null>(null); // Local error state
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleGoogleSignIn = async () => { // Asynchronous function to handle Google sign-in
     await signInWithGoogle();
     router.push("/")
@@ -55,6 +61,7 @@ const Login = () => {
 
     if (!email) {
       setErrors((prev) => ({ ...prev, email: "Email is required" }));
+      toast.error("Email is required!")
       setLoading(false);
       return;
     }
@@ -69,6 +76,7 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
 
       router.push("/");
+      toast.success("Login Successful!")
     } catch (err: any) {
       console.error("Authentication Error:", err.code, err.message);
       setError(mapFirebaseError(err.code)); // Use helper function to map errors
@@ -80,7 +88,7 @@ const Login = () => {
   };
 
   return ( // Returns JSX for the component
-    <div className="flex items-center justify-center h-screen">
+    <Card className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-96">
         <h2 className="text-2xl font-bold mb-6">Login</h2>
         {error && <p className="text-red-600 text-center mb-4">{error}</p>}
@@ -98,14 +106,22 @@ const Login = () => {
           </div>
 
           <div>
+          <div className="relative">
             <input
-              type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full p-2 border ${errors.password ? "border-red-500" : "border-gray-300"} rounded`}
-              
+              type={showPassword ? "text" : "password"}
+              className="w-full p-2 border rounded"
             />
+            <button
+              type="button"
+              className="absolute right-2 top-2 text-gray-500"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "🙈" : "👁"}
+            </button>
+          </div>
             {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
           </div>
           <button type="submit"
@@ -124,7 +140,7 @@ const Login = () => {
             
         </form>
       </div>
-    </div>
+    </Card>
   );
 };
 

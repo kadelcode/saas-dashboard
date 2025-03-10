@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { Inter, Poppins, DM_Sans } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 /*const inter = Inter({
   subsets: ["latin"], // Supports different character sets
@@ -43,6 +43,25 @@ export default function RootLayout({
         className={`${inter.variable} ${poppins.variable} ${dmSans.variable} antialiased bg-gray-100 text-gray-900`}
       >
         <LayoutWrapper>{children}</LayoutWrapper>
+
+        <Toaster
+        toastOptions={{
+          success: {
+            style: {
+              background: 'lightgreen',
+              color: 'black',
+              width: '25%'
+            },
+          },
+          error: {
+            style: {
+              background: 'lightcoral',
+              color: 'white',
+              width: '25%',
+            },
+          },
+        }}
+      />
         
       </body>
     </html>

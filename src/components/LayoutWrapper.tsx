@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import React from "react";
 import Sidebar from "./Sidebar";
 import { auth } from "@/lib/firebase";
+import LogoutButton from "./LogoutButton";
+import Dashboard from "@/app/dashboard/page";
 
 const publicRoutes = ["/login", "/register"];
 
@@ -58,8 +60,9 @@ function DashboardLayout({ children } : { children: React.ReactNode }) {
           <div className="flex-1 flex flex-col">
               {/* Navbar */}
               <header className="bg-white shadow p-4 flex justify-between items-center">
-                <h1 className="text-lg font-semibold">Admin Panel</h1>
-                <button className="px-4 py-2 bg-gray-800 text-white rounded">Sign Out</button>
+                {/*<h1 className="text-lg font-semibold">Admin Panel</h1>*/}
+                <Dashboard />
+                <LogoutButton />
               </header>
 
               {/* Page Content */}

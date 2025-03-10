@@ -20,8 +20,7 @@ const Dashboard = () => {
 
   return user ? (
     <div>
-      <h1 className="text-2xl font-bold">Welcome, {user.displayName || user.email}</h1>
-      <LogoutButton />
+      <p className="text-lg font-bold">Welcome, {user.displayName || user.email}</p>
     </div>
   ) : null;
 };
