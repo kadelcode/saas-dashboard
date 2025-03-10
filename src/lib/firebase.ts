@@ -19,10 +19,10 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 // Ensure Analytics only runs on the client side
-let analytics;
+/*let analytics;
 if (typeof window !== "undefined") {
   analytics = getAnalytics(app);
-}
+}*/
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);

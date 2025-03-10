@@ -17,6 +17,11 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
+    interface FirebaseError {
+      code: string;
+      message: string;
+    }
+
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault(); // Prevents the default form submission behavior
         setError(null); // Clear previous errors
@@ -36,9 +41,18 @@ const Register = () => {
           await updateProfile(userCredential.user, userCredential.user)
           toast.success("Registration successful!")
           router.push("/");
-        } catch (err: any) {
-          console.error("Registration Error:", err.code, err.message);
-          setError(mapFirebaseError(err.code)); // Update UI with error
+        } catch (err: unknown) {
+          if (typeof err == 'object' && err != null && 'code' in err && 'message' in err) {
+            const firebaseError = err as FirebaseError;
+            console.error("Authentication Error:", firebaseError.code, firebaseError.message);
+            setError(mapFirebaseError(firebaseError.code));
+            return;
+          } else {
+            // Handle the case where 'err' is no a FirebaseError
+            console.error("Unknown Authentication Error:", err);
+            setError("unknown-error") // Or some default error
+            return;
+          }
         } finally {
           setLoading(false);
         }

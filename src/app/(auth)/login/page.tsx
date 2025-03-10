@@ -46,10 +46,16 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleGoogleSignIn = async () => { // Asynchronous function to handle Google sign-in
+  /*const handleGoogleSignIn = async () => { // Asynchronous function to handle Google sign-in
     await signInWithGoogle();
     router.push("/")
-  };
+  };*/
+
+  interface FirebaseError {
+    code: string;
+    message: string;
+    // Add other properties if needed
+  }
 
   const handleEmailSignIn = async (e: React.FormEvent) => { // Asynchronous function to handle email sign-in
     e.preventDefault(); // Prevents the default form submission behavior
@@ -77,10 +83,18 @@ const Login = () => {
 
       router.push("/");
       toast.success("Login Successful!")
-    } catch (err: any) {
-      console.error("Authentication Error:", err.code, err.message);
-      setError(mapFirebaseError(err.code)); // Use helper function to map errors
-      return;
+    } catch (err: unknown) {
+      if (typeof err == 'object' && err != null && 'code' in err && 'message' in err) {
+        const firebaseError = err as FirebaseError;
+        console.error("Authentication Error:", firebaseError.code, firebaseError.message);
+        setError(mapFirebaseError(firebaseError.code));
+        return;
+      } else {
+        // Handle the case where 'err' is no a FirebaseError
+        console.error("Unknown Authentication Error:", err);
+        setError("unknown-error") // Or some default error
+        return;
+      }
     } finally {
       setLoading(false); // Stop loading after request
     }
