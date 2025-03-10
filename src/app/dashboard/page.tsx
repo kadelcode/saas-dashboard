@@ -16,7 +16,7 @@ const Dashboard = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   return user ? (
     <div>

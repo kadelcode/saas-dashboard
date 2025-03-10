@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+// import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { Inter, Poppins, DM_Sans } from "next/font/google";
@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ["latin"], weight: ["400", "700"], variable: "--f
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-poppins" });
 const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-dmsans" });
 
-const geistSans = Geist({
+/*const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
+*/
 export const metadata: Metadata = {
   title: "My SaaS Dashboard",
   description: "Admin panel built with Next.js 13+",

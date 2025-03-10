@@ -7,7 +7,7 @@ state to functional components
 import { useState } from "react";
 
 /* Import functions from local module `@/lib/auth` */
-import { signInWithGoogle, signInWithEmail } from "@/lib/auth";
+import { signInWithGoogle } from "@/lib/auth";
 
 /* Imports the `useRouter` hook from Next.js, which provides
 navigation capabilities.
