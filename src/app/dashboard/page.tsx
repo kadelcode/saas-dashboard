@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-// import LogoutButton from "@/components/LogoutButton";
 
 const Dashboard = () => {
   const [user, setUser] = useState(auth.currentUser);

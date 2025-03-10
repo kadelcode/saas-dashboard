@@ -6,9 +6,6 @@ state to functional components
 */
 import { useState } from "react";
 
-/* Import functions from local module `@/lib/auth` */
-/*import { signInWithGoogle } from "@/lib/auth";*/
-
 /* Imports the `useRouter` hook from Next.js, which provides
 navigation capabilities.
 */
@@ -18,9 +15,6 @@ import { ClipLoader } from "react-spinners";
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import toast from "react-hot-toast";
 import { Card } from "@/components/ui/card";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-// import { Button } from "@/components/ui/button";
 
 // Defines a functional component
 const Login = () => {
@@ -45,11 +39,6 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null); // Local error state
 
   const [showPassword, setShowPassword] = useState(false);
-
-  /*const handleGoogleSignIn = async () => { // Asynchronous function to handle Google sign-in
-    await signInWithGoogle();
-    router.push("/")
-  };*/
 
   interface FirebaseError {
     code: string;

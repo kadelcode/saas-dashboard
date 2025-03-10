@@ -5,26 +5,10 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 import { Inter, Poppins, DM_Sans } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
-/*const inter = Inter({
-  subsets: ["latin"], // Supports different character sets
-  weight: "400", // Specify font weight
-  variable: "--font-inter", // Optional CSS variable
-})*/
-
 const inter = Inter({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-inter" });
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-poppins" });
 const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-dmsans" });
 
-/*const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-*/
 export const metadata: Metadata = {
   title: "My SaaS Dashboard",
   description: "Admin panel built with Next.js 13+",
