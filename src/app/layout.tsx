@@ -34,14 +34,14 @@ export default function RootLayout({
             style: {
               background: 'lightgreen',
               color: 'black',
-              width: '25%'
+              maxWidth: '368px'
             },
           },
           error: {
             style: {
               background: 'lightcoral',
               color: 'white',
-              width: '25%',
+              maxWidth: '368px',
             },
           },
         }}
